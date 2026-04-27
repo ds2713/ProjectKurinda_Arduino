@@ -2,11 +2,13 @@
 #include <PubSubClient.h>
 
 // ==== WIFI SETTINGS ====
-const char* ssid = "YOUR_WIFI";
-const char* password = "YOUR_PASSWORD";
+const char ssid[] = "Nano33_AP";
+const char password[] = "password123";
+const char data_topic[] = "landslides/data";
+const char alert_topic[] = "landlides/alerts";
 
 // ==== MQTT SETTINGS ====
-const char* mqtt_server = "192.168.1.100"; // your PC IP
+const char* mqtt_server = "192.168.4.2"; // your PC IP
 const int mqtt_port = 1883;
 
 WiFiClient wifiClient;
@@ -28,13 +30,13 @@ void connectWiFi() {
 // ==== CONNECT TO MQTT ====
 void connectMQTT() {
   while (!client.connected()) {
-    Serial.print("Connecting to MQTT...");
+    Serial.println("Connecting to MQTT...");
 
     if (client.connect("nano33iot-client")) {
       Serial.println("connected!");
     } else {
-      Serial.print("failed, rc=");
-      Serial.print(client.state());
+      Serial.println("failed, rc=");
+      Serial.println(client.state());
       Serial.println(" retrying...");
       delay(2000);
     }
@@ -59,21 +61,26 @@ void loop() {
 
   // ==== Generate dummy data ====
   int site_id = random(1, 4);
+  float acceleration = random(-10, 10);
   float temperature = random(200, 300) / 10.0;
-  float acceleration = random(0, 100) / 10.0;
+  float soil_moisture = random(0, 100);
 
   // ==== Build JSON payload ====
   String payload = "{";
-  payload += "\"site_id\":" + String(site_id) + ",";
-  payload += "\"temperature\":" + String(temperature) + ",";
-  payload += "\"acceleration\":" + String(acceleration);
+  payload += "\"sid\":" + String(site_id) + ",";
+  payload += "\"ts\":" + String(millis()) + ",";
+  payload += "\"ac\":" + String(acceleration) + ",";
+  payload += "\"tmp\":" + String(temperature) + ",";
+  payload += "\"sm\":" + String(soil_moisture);
   payload += "}";
 
   // ==== Publish ====
-  client.publish("sensors/data", payload.c_str());
+  client.publish(data_topic, payload.c_str());
 
   Serial.print("Published: ");
   Serial.println(payload);
 
   delay(5000);
 }
+
+
