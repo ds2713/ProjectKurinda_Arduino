@@ -8,11 +8,32 @@ const char data_topic[] = "landslides/data";
 const char alert_topic[] = "landlides/alerts";
 
 // ==== MQTT SETTINGS ====
-const char* mqtt_server = "192.168.4.2"; // your PC IP
+const char* mqtt_server = "192.168.4.2"; // the IP address of the MQTT broker
 const int mqtt_port = 1883;
 
 WiFiClient wifiClient;
 PubSubClient client(wifiClient);
+
+// Function to get acceleration data
+float get_acceleration() {
+  // Simulate acceleration data between -10 and 10 m/s^2
+  float acc = (float) random(-10, 10);
+  return acc;
+};
+
+// Function to get temperature data
+float get_temperature() {
+  // Simulate temperature data between 0.0 and 50.0 degrees Celsius
+  float temp = (float) random(0, 50);
+  return temp;
+};
+
+// Function to get soil moisture data
+float get_soil_moisture() {
+  // Simulate soil moisture data
+  float moisture = (float) random(0, 100);
+  return moisture;
+};
 
 // ==== CONNECT TO WIFI ====
 void connectWiFi() {
@@ -59,11 +80,12 @@ void loop() {
 
   client.loop();
 
-  // ==== Generate dummy data ====
+
+  // ==== Collect sensor data ====
   int site_id = random(1, 4);
-  float acceleration = random(-10, 10);
-  float temperature = random(200, 300) / 10.0;
-  float soil_moisture = random(0, 100);
+  float acceleration = get_acceleration();
+  float temperature = get_temperature();
+  float soil_moisture = get_soil_moisture();
 
   // ==== Build JSON payload ====
   String payload = "{";

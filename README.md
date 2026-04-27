@@ -20,7 +20,9 @@ The Arduino microcontroller monitors the sensor readings and stores the data. Cu
 
 Once a minute, the Arduino connects to the WiFi network and publishes the averaged data from the last minute. After transmitting the data, the Arduino switches off the WiFi module to save power until the next time it needs to transmit.
 
-#### Data packet format
+#### Arduino code
+
+## Data packet format
 
 Each data packet (containing the time-averaged data from the last minute) is a JSON string containing the following data:
 
@@ -43,10 +45,13 @@ The format of the JSON string is thus:
     "sm":<XXX>
 }
 ```
-#### Arduino code
-
-
 
 ## Installation instructions
 
-##
+The software for the Arduino sensor was written using VS Code using the PlatformIO plug-in (https://platformio.org/), and can be used by cloning this repo.
+
+## A note on cybersecurity and system resilience
+
+This project is intended to be a baseline, minimal working example of a system which can monitor conditions and detect landslides using sensors on a mesh network. For simplicity of development and public understanding, the system does not currently include any form of user authentication or encryption, and only minimal error checking. Consequenctly, bad actors could easily inject false data to trigger warnings or pollute the database. Nor does it consider system availability or redundancy, meaning that currently a single server issue (even as simple as losing internet connection) could prevent the whole system working at all.
+
+If this demonstration system is to be scaled up and used for real monitoring, suitable precautions should be taken to minimise the likelihood of this occurring. For example, server redundancy and database backup might be a simple first step, followed by user authentication and encryption on the data transmissions to prevent bad actors spoofing the data. However, all these considerations add complexity, cost and effort to the implementation of this system.
