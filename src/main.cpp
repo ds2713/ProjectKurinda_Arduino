@@ -17,7 +17,7 @@ const int mqtt_port = 1883;
 
 // ==== SAMPLE TIMING CONGIGURATION ====
 
-const int SAMPLE_COUNT = 6;
+const int SAMPLE_COUNT = 6; // Number of samples collected before averaging
 const int TX_COUNT_MAX = 6; // Transmit every 6 samples (1 min)
 const int SLEEP_INTERVAL_MS = 1000; // 10s
 
@@ -142,8 +142,7 @@ void data_processing_loop(){
 
   Serial.println("Starting data processing loop...");
 
-  // ==== SAMPLE EVERY 10s ====
-
+  // Get new data from sensors
   float new_acc = get_acceleration();
   float new_temp = get_temperature();
   float new_soil = get_soil_moisture();

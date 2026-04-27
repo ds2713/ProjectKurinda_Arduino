@@ -22,6 +22,12 @@ Once a minute, the Arduino connects to the WiFi network and publishes the averag
 
 #### Arduino code
 
+The Arduino code uses low power sleep to turn off most peripherals in the microcontroller when not in use.
+
+1. Microcontroller wakes up every 10 seconds to gather data, then returns to low power sleep.
+2. After collecting a set of 6 samples, the microcontroller activates the WiFi module, connects to the WiFi AP and to the MQTT broker, then transmits the averaged data.
+3. After transmitting the data packet, the microcontroller turns off the WiFi module and returns to low power sleep.
+
 ## Data packet format
 
 Each data packet (containing the time-averaged data from the last minute) is a JSON string containing the following data:
